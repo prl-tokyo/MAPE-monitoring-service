@@ -1,5 +1,6 @@
 package jp.ac.nii.prl.mape.monitoring.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -18,16 +19,24 @@ public class Model {
 	private Long id;
 	
 	@OneToMany(mappedBy="model")
-	private List<Instance> instances;
+	private List<Instance> instances = new ArrayList<>();
 	
 	@OneToMany(mappedBy="model")
-	private List<SecurityGroup> securityGroups;
+	private List<SecurityGroup> securityGroups = new ArrayList<>();
 
 	@OneToMany(mappedBy="model")
-	private List<InstanceType> instanceTypes;
+	private List<InstanceType> instanceTypes = new ArrayList<>();
 	
 	public void addInstance(Instance instance) {
 		instances.add(instance);
+	}
+	
+	public void addInstanceType(InstanceType instanceType) {
+		instanceTypes.add(instanceType);
+	}
+	
+	public void addSecurityGroups(SecurityGroup securityGroup) {
+		securityGroups.add(securityGroup);
 	}
 
 	public Long getId() {
