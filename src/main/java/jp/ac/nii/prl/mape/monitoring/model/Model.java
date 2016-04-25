@@ -25,6 +25,10 @@ public class Model {
 
 	@OneToMany(mappedBy="model")
 	private List<InstanceType> instanceTypes;
+	
+	public void addInstance(Instance instance) {
+		instances.add(instance);
+	}
 
 	public Long getId() {
 		return id;
