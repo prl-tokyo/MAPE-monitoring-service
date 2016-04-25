@@ -1,5 +1,6 @@
 package jp.ac.nii.prl.mape.monitoring.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,16 @@ public class ModelServiceImpl implements ModelService {
 
 	private final ModelRepository modelRepository;
 	
+	private final InstanceService instanceService;
+	private final SecurityGroupService securityGroupService;
+	
 	@Autowired
-	public ModelServiceImpl(ModelRepository modelRepository) {
+	public ModelServiceImpl(ModelRepository modelRepository, 
+			InstanceService instanceService,
+			SecurityGroupService securityGroupService) {
 		this.modelRepository = modelRepository;
+		this.instanceService = instanceService;
+		this.securityGroupService = securityGroupService;
 	}
 	
 	/* (non-Javadoc)
@@ -32,5 +40,18 @@ public class ModelServiceImpl implements ModelService {
 	@Override
 	public Optional<Model> findById(Long modelId) {
 		return modelRepository.findById(modelId);
+	}
+	
+	@Override
+	public Model createModel(List<com.amazonaws.services.ec2.model.Instance> instances,
+			List<com.amazonaws.services.ec2.model.SecurityGroup> securityGroups) {
+		Model model = new Model();
+		for (com.amazonaws.services.ec2.model.Instance instance:instances) {
+			model.addInstance(instanceService.fromAWS(instance));
+		}
+		for (com.amazonaws.services.ec2.model.SecurityGroup sg:securityGroups) {
+			model.addSecurityGroups(securityGroupService.fromAWS(sg));
+		}
+		return model;
 	}
 }
