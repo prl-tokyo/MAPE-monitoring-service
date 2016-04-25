@@ -7,6 +7,7 @@ import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.SecurityGroup;
 
 import jp.ac.nii.prl.mape.monitoring.model.Model;
+import jp.ac.nii.prl.mape.monitoring.properties.InstanceTypeProperties;
 
 public interface ModelService {
 
@@ -14,6 +15,8 @@ public interface ModelService {
 
 	Optional<Model> findById(Long modelId);
 
-	Model createModel(List<Instance> instances, List<SecurityGroup> securityGroups);
+	Model createModel(List<Instance> instances, 
+			List<SecurityGroup> securityGroups, 
+			InstanceTypeProperties instanceTypeProperties);
 
 }

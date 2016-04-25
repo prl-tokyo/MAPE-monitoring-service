@@ -12,6 +12,7 @@ import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.SecurityGroup;
 
 import jp.ac.nii.prl.mape.monitoring.model.Model;
+import jp.ac.nii.prl.mape.monitoring.properties.InstanceTypeProperties;
 import jp.ac.nii.prl.mape.monitoring.service.EC2Service;
 import jp.ac.nii.prl.mape.monitoring.service.ModelService;
 
@@ -26,6 +27,9 @@ public class MonitoringController {
 	@Autowired
 	private ModelService modelService;
 	
+	@Autowired
+	private InstanceTypeProperties instanceTypeProperties;
+	
 	@RequestMapping(value="/instances", method=RequestMethod.GET)
 	public List<Instance> getInstances() {
 		return ec2Service.getInstances();
@@ -38,6 +42,8 @@ public class MonitoringController {
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public Model getModel() {
-		return modelService.createModel(ec2Service.getInstances(), ec2Service.getSecurityGroups());
+		return modelService.createModel(ec2Service.getInstances(), 
+				ec2Service.getSecurityGroups(),
+				instanceTypeProperties);
 	}
 }
