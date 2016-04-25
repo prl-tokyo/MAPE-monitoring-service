@@ -17,21 +17,21 @@ public class Model {
 	@JsonIgnore
 	private Long id;
 	
-	@OneToMany(mappedBy="instance")
-	private List<Instance> instance;
+	@OneToMany(mappedBy="model")
+	private List<Instance> instances;
 	
-	@OneToMany(mappedBy="securityGroup")
+	@OneToMany(mappedBy="model")
 	private List<SecurityGroup> securityGroups;
 
-	@OneToMany(mappedBy="instanceType")
+	@OneToMany(mappedBy="model")
 	private List<InstanceType> instanceTypes;
 
 	public Long getId() {
 		return id;
 	}
 
-	public List<Instance> getInstance() {
-		return instance;
+	public List<Instance> getInstances() {
+		return instances;
 	}
 
 	public List<InstanceType> getInstanceTypes() {
@@ -46,8 +46,8 @@ public class Model {
 		this.id = id;
 	}
 
-	public void setInstance(List<Instance> instance) {
-		this.instance = instance;
+	public void setInstances(List<Instance> instances) {
+		this.instances = instances;
 	}
 
 	public void setInstanceTypes(List<InstanceType> instanceTypes) {

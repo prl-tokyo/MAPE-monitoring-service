@@ -2,10 +2,12 @@ package jp.ac.nii.prl.mape.monitoring.model;
 
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,8 +21,10 @@ public class SecurityGroup {
 	
 	private String sgID;
 	
+	@ElementCollection
 	private List<String> instRefs;
 	
+	@OneToMany(mappedBy="securityGroup")
 	private List<FirewallRule> firewallRules;
 	
 	@ManyToOne
