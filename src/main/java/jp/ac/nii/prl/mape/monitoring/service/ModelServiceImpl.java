@@ -2,6 +2,7 @@ package jp.ac.nii.prl.mape.monitoring.service;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jp.ac.nii.prl.mape.monitoring.model.Model;
@@ -12,6 +13,7 @@ public class ModelServiceImpl implements ModelService {
 
 	private final ModelRepository modelRepository;
 	
+	@Autowired
 	public ModelServiceImpl(ModelRepository modelRepository) {
 		this.modelRepository = modelRepository;
 	}
