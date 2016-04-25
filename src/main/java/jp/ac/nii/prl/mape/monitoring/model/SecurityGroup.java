@@ -1,5 +1,6 @@
 package jp.ac.nii.prl.mape.monitoring.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ElementCollection;
@@ -25,11 +26,15 @@ public class SecurityGroup {
 	private List<String> instRefs;
 	
 	@OneToMany(mappedBy="securityGroup")
-	private List<FirewallRule> firewallRules;
+	private List<FirewallRule> firewallRules = new ArrayList<>();
 	
 	@ManyToOne
 	@JsonIgnore
 	private Model model;
+	
+	public void addFirewallRule(FirewallRule firewallRule) {
+		firewallRules.add(firewallRule);
+	}
 
 	public List<FirewallRule> getFirewallRules() {
 		return firewallRules;
