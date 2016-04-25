@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import jp.ac.nii.prl.mape.monitoring.model.InstanceType;
 import jp.ac.nii.prl.mape.monitoring.model.Model;
 import jp.ac.nii.prl.mape.monitoring.properties.InstanceTypeProperties;
-import jp.ac.nii.prl.mape.monitoring.properties.InstanceTypeProperties.InstanceTypeProperty;
+import jp.ac.nii.prl.mape.monitoring.properties.InstanceTypeProperty;
 import jp.ac.nii.prl.mape.monitoring.repository.ModelRepository;
 
 @Service("modelService")
@@ -57,6 +57,7 @@ public class ModelServiceImpl implements ModelService {
 			model.addSecurityGroups(securityGroupService.fromAWS(sg));
 		}
 		for (InstanceTypeProperty instanceTypeProperty:instanceTypeProperties.getInstanceTypes()) {
+			System.out.println("Here");
 			InstanceType instanceType = new InstanceType();
 			instanceType.setTypeCost(instanceTypeProperty.getTypeCost());
 			instanceType.setTypeCPUs(instanceTypeProperty.getTypeCPUs());
