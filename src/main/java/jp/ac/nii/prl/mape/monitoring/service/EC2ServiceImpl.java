@@ -10,9 +10,11 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
+import com.amazonaws.services.ec2.model.DescribeSecurityGroupsRequest;
 import com.amazonaws.services.ec2.model.Filter;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.Reservation;
+import com.amazonaws.services.ec2.model.SecurityGroup;
 
 @Service("ec2Service")
 public class EC2ServiceImpl implements EC2Service {
@@ -20,6 +22,7 @@ public class EC2ServiceImpl implements EC2Service {
 	private AmazonEC2Client ec2Client;
 	private Filter filter;
 	private DescribeInstancesRequest request;
+	private DescribeSecurityGroupsRequest sgRequest;
 	
 	public EC2ServiceImpl() {
 		ec2Client = Region
@@ -29,6 +32,7 @@ public class EC2ServiceImpl implements EC2Service {
 		tagValues.add("CloudBX");
 		filter = new Filter("tag:Experiment", tagValues);
 		request = new DescribeInstancesRequest();
+		sgRequest = new DescribeSecurityGroupsRequest();
 	}
 	
 	/* (non-Javadoc)
@@ -44,5 +48,10 @@ public class EC2ServiceImpl implements EC2Service {
 			instances.addAll(reservation.getInstances());
 		}
 		return instances;
-	}	
+	}
+	
+	@Override
+	public List<SecurityGroup> getSecurityGroups() {
+		return ec2Client.describeSecurityGroups(sgRequest.withFilters(filter)).getSecurityGroups();
+	}
 }

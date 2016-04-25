@@ -3,9 +3,12 @@ package jp.ac.nii.prl.mape.monitoring.service;
 import java.util.List;
 
 import com.amazonaws.services.ec2.model.Instance;
+import com.amazonaws.services.ec2.model.SecurityGroup;
 
 public interface EC2Service {
 
 	List<Instance> getInstances();
+
+	List<SecurityGroup> getSecurityGroups();
 
 }
