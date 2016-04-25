@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amazonaws.services.ec2.model.Instance;
+import com.amazonaws.services.ec2.model.SecurityGroup;
 
 import jp.ac.nii.prl.mape.monitoring.model.Model;
 import jp.ac.nii.prl.mape.monitoring.service.EC2Service;
+import jp.ac.nii.prl.mape.monitoring.service.ModelService;
 
 @RestController
 @RequestMapping("/monitor")
@@ -21,9 +23,21 @@ public class MonitoringController {
 	@Autowired
 	private EC2Service ec2Service;
 	
-	@RequestMapping(method=RequestMethod.GET)
-	public List<Instance> monitor() {
-		System.out.println("Here");
+	@Autowired
+	private ModelService modelService;
+	
+	@RequestMapping(value="/instances", method=RequestMethod.GET)
+	public List<Instance> getInstances() {
 		return ec2Service.getInstances();
+	}
+	
+	@RequestMapping(value="/securityGroups", method=RequestMethod.GET)
+	public List<SecurityGroup> getSecurityGroups() {
+		return ec2Service.getSecurityGroups();
+	}
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public Model getModel() {
+		return modelService.createModel(ec2Service.getInstances(), ec2Service.getSecurityGroups());
 	}
 }
