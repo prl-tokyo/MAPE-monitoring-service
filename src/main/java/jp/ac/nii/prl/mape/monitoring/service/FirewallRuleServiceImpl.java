@@ -20,7 +20,10 @@ public class FirewallRuleServiceImpl implements FirewallRuleService {
 		
 		firewallRule.setFwRuleID(UUID.randomUUID().toString());
 		firewallRule.setFwStatus(0);
-		firewallRule.setIp(ipPermission.getIpRanges().get(0));
+		if (!ipPermission.getIpRanges().isEmpty())
+			firewallRule.setIp(ipPermission.getIpRanges().get(0));
+		firewallRule.setPort(ipPermission.getToPort().toString());
+		firewallRule.setProtocol(ipPermission.getIpProtocol());
 		
 		return firewallRule;
 	}
