@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.amazonaws.services.ec2.model.InstanceStateName;
+
 import jp.ac.nii.prl.mape.monitoring.model.InstanceType;
 import jp.ac.nii.prl.mape.monitoring.model.Model;
 import jp.ac.nii.prl.mape.monitoring.properties.InstanceTypeProperties;
@@ -51,7 +53,8 @@ public class ModelServiceImpl implements ModelService {
 			InstanceTypeProperties instanceTypeProperties) {
 		Model model = new Model();
 		for (com.amazonaws.services.ec2.model.Instance instance:instances) {
-			model.addInstance(instanceService.fromAWS(instance));
+			if (instance.getState().getCode().equals(new Integer(16)))
+				model.addInstance(instanceService.fromAWS(instance));
 		}
 		for (com.amazonaws.services.ec2.model.SecurityGroup sg:securityGroups) {
 			model.addSecurityGroups(securityGroupService.fromAWS(sg));
