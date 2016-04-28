@@ -11,10 +11,13 @@ import jp.ac.nii.prl.mape.monitoring.model.SecurityGroup;
 public class SecurityGroupServiceImpl implements SecurityGroupService {
 
 	private final FirewallRuleService firewallRuleService;
+	private final InstanceService instanceService;
 	
 	@Autowired
-	public SecurityGroupServiceImpl(FirewallRuleService firewallRuleService) {
+	public SecurityGroupServiceImpl(FirewallRuleService firewallRuleService,
+			InstanceService instanceService) {
 		this.firewallRuleService = firewallRuleService;
+		this.instanceService = instanceService;
 	}
 	
 	/* (non-Javadoc)
@@ -25,6 +28,8 @@ public class SecurityGroupServiceImpl implements SecurityGroupService {
 		SecurityGroup sg = new SecurityGroup();
 		
 		sg.setSgID(aws.getGroupId());
+		
+		sg.setInstRefs(instanceService.getInstancesInSG(sg.getSgID()));
 		
 		for (IpPermission ipPermission:aws.getIpPermissions())
 			sg.addFirewallRule(firewallRuleService.fromAWS(ipPermission));

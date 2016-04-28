@@ -3,6 +3,11 @@
  */
 package jp.ac.nii.prl.mape.monitoring.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +18,12 @@ public class InstanceServiceImpl implements InstanceService {
 
 	private final CloudWatchService cwService;
 	
+	private Map<String, List<String>> sgToInstance;
+	
 	@Autowired
 	public InstanceServiceImpl(CloudWatchService cwService) {
 		this.cwService = cwService;
+		sgToInstance = new HashMap<>();
 	}
 	
 	/* (non-Javadoc)
@@ -28,10 +36,28 @@ public class InstanceServiceImpl implements InstanceService {
 		instance.setInstID(aws.getInstanceId());
 		instance.setInstStatus(0);
 		instance.setInstType(aws.getInstanceType());
-		instance.setSecurityGroupRef(aws.getSecurityGroups().iterator().next().getGroupId());
+		String sg = aws.getSecurityGroups().iterator().next().getGroupId();
+		instance.setSecurityGroupRef(sg);
+		addToSg(instance.getInstID(), sg);
 		instance.setState(aws.getState().getCode());
 		instance.setLoad(cwService.getLoad(instance.getInstID()));
 		return instance;
 	}
-
+	
+	private void addToSg(String instance, String sg) {
+		if (sgToInstance.containsKey(sg)) {
+			List<String> instances = sgToInstance.get(sg);
+			instances.add(instance);
+			sgToInstance.put(sg, instances);
+		} else {
+			List<String> instances = new ArrayList<>();
+			instances.add(instance);
+			sgToInstance.put(sg, instances);
+		}
+	}
+	
+	@Override
+	public List<String> getInstancesInSG(String sg) {
+		return sgToInstance.get(sg);
+	}
 }
