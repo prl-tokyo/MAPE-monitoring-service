@@ -2,6 +2,8 @@ package jp.ac.nii.prl.mape.monitoring.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,8 @@ import jp.ac.nii.prl.mape.monitoring.service.ModelService;
 @RequestMapping("/monitor")
 @Component
 public class MonitoringController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MonitoringController.class);
 
 	@Autowired
 	private EC2Service ec2Service;
@@ -42,8 +46,11 @@ public class MonitoringController {
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public Model getModel() {
-		return modelService.createModel(ec2Service.getInstances(), 
+		logger.info("Building model from AWS API");
+		Model model = modelService.createModel(ec2Service.getInstances(), 
 				ec2Service.getSecurityGroups(),
 				instanceTypeProperties);
+		logger.info("Model completed");
+		return model;
 	}
 }
