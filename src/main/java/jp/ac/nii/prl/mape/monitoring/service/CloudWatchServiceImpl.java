@@ -24,6 +24,10 @@ public class CloudWatchServiceImpl implements CloudWatchService {
 				.createClient(AmazonCloudWatchClient.class, null, null);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see jp.ac.nii.prl.mape.monitoring.service.CloudWatchService#getLoad(java.lang.String)
+	 */
 	@Override
 	public Double getLoad(String instId) {
 		long offset = 1000 * 60 * 15; // 15 minutes

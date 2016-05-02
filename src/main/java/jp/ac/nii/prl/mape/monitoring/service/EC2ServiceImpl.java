@@ -49,6 +49,10 @@ public class EC2ServiceImpl implements EC2Service {
 		return instances;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see jp.ac.nii.prl.mape.monitoring.service.EC2Service#getSecurityGroups()
+	 */
 	@Override
 	public List<SecurityGroup> getSecurityGroups() {
 		return ec2Client.describeSecurityGroups(sgRequest.withFilters(filter)).getSecurityGroups();

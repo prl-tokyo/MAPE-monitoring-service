@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jp.ac.nii.prl.mape.monitoring.SecurityGroupNotFoundException;
 import jp.ac.nii.prl.mape.monitoring.model.InstanceType;
 import jp.ac.nii.prl.mape.monitoring.model.Model;
 import jp.ac.nii.prl.mape.monitoring.properties.InstanceTypeProperties;
@@ -48,7 +49,7 @@ public class ModelServiceImpl implements ModelService {
 	@Override
 	public Model createModel(List<com.amazonaws.services.ec2.model.Instance> instances,
 			List<com.amazonaws.services.ec2.model.SecurityGroup> securityGroups,
-			InstanceTypeProperties instanceTypeProperties) {
+			InstanceTypeProperties instanceTypeProperties) throws SecurityGroupNotFoundException {
 		Model model = new Model();
 		for (com.amazonaws.services.ec2.model.Instance instance:instances) {
 			if (instance.getState().getCode().equals(new Integer(16)))

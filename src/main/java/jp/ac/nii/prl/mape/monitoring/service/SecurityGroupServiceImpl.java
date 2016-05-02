@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.ec2.model.IpPermission;
 
+import jp.ac.nii.prl.mape.monitoring.SecurityGroupNotFoundException;
 import jp.ac.nii.prl.mape.monitoring.model.SecurityGroup;
 
 @Service("securityGroupService")
@@ -24,7 +25,7 @@ public class SecurityGroupServiceImpl implements SecurityGroupService {
 	 * @see jp.ac.nii.prl.mape.monitoring.service.SecurityGroupService#fromAWS(com.amazonaws.services.ec2.model.SecurityGroup)
 	 */
 	@Override
-	public SecurityGroup fromAWS(com.amazonaws.services.ec2.model.SecurityGroup aws) {
+	public SecurityGroup fromAWS(com.amazonaws.services.ec2.model.SecurityGroup aws) throws SecurityGroupNotFoundException {
 		SecurityGroup sg = new SecurityGroup();
 		
 		sg.setSgID(aws.getGroupId());

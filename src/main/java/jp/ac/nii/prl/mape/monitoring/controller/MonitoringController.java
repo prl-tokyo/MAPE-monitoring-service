@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.SecurityGroup;
 
+import jp.ac.nii.prl.mape.monitoring.ModelConstructionException;
+import jp.ac.nii.prl.mape.monitoring.SecurityGroupNotFoundException;
 import jp.ac.nii.prl.mape.monitoring.model.Model;
 import jp.ac.nii.prl.mape.monitoring.properties.InstanceTypeProperties;
 import jp.ac.nii.prl.mape.monitoring.service.EC2Service;
@@ -53,9 +55,16 @@ public class MonitoringController {
 	@RequestMapping(method=RequestMethod.GET)
 	public Model getModel() {
 		logger.info("Building model from AWS API");
-		Model model = modelService.createModel(ec2Service.getInstances(), 
-				ec2Service.getSecurityGroups(),
-				instanceTypeProperties);
+		Model model = null;
+		try {
+			model = modelService.createModel(ec2Service.getInstances(), 
+					ec2Service.getSecurityGroups(),
+					instanceTypeProperties);
+		} catch (SecurityGroupNotFoundException e) {
+			logger.error(String.format("SecurityGroupNotFoundException: %s", e.getMessage()));
+			logger.trace(e.getStackTrace().toString());
+			throw new ModelConstructionException("Could not construct model");
+		}
 		logger.debug(String.format("Model contains %s instances, %s instance types, and %s security groups", 
 				model.getInstances().size(), 
 				model.getInstanceTypes().size(), 

@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jp.ac.nii.prl.mape.monitoring.SecurityGroupNotFoundException;
 import jp.ac.nii.prl.mape.monitoring.model.Instance;
 
 @Service("instanceService")
@@ -56,8 +57,16 @@ public class InstanceServiceImpl implements InstanceService {
 		}
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see jp.ac.nii.prl.mape.monitoring.service.InstanceService#getInstancesInSG(java.lang.String)
+	 */
 	@Override
-	public List<String> getInstancesInSG(String sg) {
-		return sgToInstance.get(sg);
+	public List<String> getInstancesInSG(String sg) throws SecurityGroupNotFoundException {
+		if (sgToInstance.containsKey(sg))
+			return sgToInstance.get(sg);
+		else
+			throw new SecurityGroupNotFoundException(
+					String.format("No security group found with id %s", sg));
 	}
 }
