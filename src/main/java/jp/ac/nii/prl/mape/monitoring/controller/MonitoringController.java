@@ -36,12 +36,18 @@ public class MonitoringController {
 	
 	@RequestMapping(value="/instances", method=RequestMethod.GET)
 	public List<Instance> getInstances() {
-		return ec2Service.getInstances();
+		logger.info("Getting list of instances");
+		List<Instance> instances = ec2Service.getInstances();
+		logger.debug(String.format("List of instances contains %s elements", instances.size()));
+		return instances;
 	}
 	
 	@RequestMapping(value="/securityGroups", method=RequestMethod.GET)
 	public List<SecurityGroup> getSecurityGroups() {
-		return ec2Service.getSecurityGroups();
+		logger.info("Getting list of security groups");
+		List<SecurityGroup> sgs = ec2Service.getSecurityGroups();
+		logger.debug(String.format("List of security groups contains %s elements", sgs.size()));
+		return sgs;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
@@ -50,7 +56,10 @@ public class MonitoringController {
 		Model model = modelService.createModel(ec2Service.getInstances(), 
 				ec2Service.getSecurityGroups(),
 				instanceTypeProperties);
-		logger.info("Model completed");
+		logger.debug(String.format("Model contains %s instances, %s instance types, and %s security groups", 
+				model.getInstances().size(), 
+				model.getInstanceTypes().size(), 
+				model.getSecurityGroups().size()));
 		return model;
 	}
 }
