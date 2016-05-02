@@ -25,7 +25,8 @@ public class SecurityGroupServiceImpl implements SecurityGroupService {
 	 * @see jp.ac.nii.prl.mape.monitoring.service.SecurityGroupService#fromAWS(com.amazonaws.services.ec2.model.SecurityGroup)
 	 */
 	@Override
-	public SecurityGroup fromAWS(com.amazonaws.services.ec2.model.SecurityGroup aws) throws SecurityGroupNotFoundException {
+	public SecurityGroup fromAWS(com.amazonaws.services.ec2.model.SecurityGroup aws) 
+			throws SecurityGroupNotFoundException {
 		SecurityGroup sg = new SecurityGroup();
 		
 		sg.setSgID(aws.getGroupId());
