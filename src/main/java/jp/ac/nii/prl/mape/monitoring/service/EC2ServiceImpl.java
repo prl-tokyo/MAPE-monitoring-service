@@ -3,10 +3,12 @@ package jp.ac.nii.prl.mape.monitoring.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.DescribeSecurityGroupsRequest;
@@ -14,6 +16,8 @@ import com.amazonaws.services.ec2.model.Filter;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.Reservation;
 import com.amazonaws.services.ec2.model.SecurityGroup;
+
+import jp.ac.nii.prl.mape.monitoring.MonitorConfiguration;
 
 @Service("ec2Service")
 public class EC2ServiceImpl implements EC2Service {
@@ -23,13 +27,21 @@ public class EC2ServiceImpl implements EC2Service {
 	private DescribeInstancesRequest request;
 	private DescribeSecurityGroupsRequest sgRequest;
 	
+	@Autowired
+	private MonitorConfiguration configuration;
+	
 	public EC2ServiceImpl() {
+		
+	}
+	
+	@PostConstruct
+	public void Configure() {
 		ec2Client = Region
-				.getRegion(Regions.AP_NORTHEAST_1)
+				.getRegion(configuration.getRegion())
 				.createClient(AmazonEC2Client.class, null, null);
 		List<String> tagValues = new ArrayList<>();
-		tagValues.add("CloudBX");
-		filter = new Filter("tag:Experiment", tagValues);
+		tagValues.add(configuration.getTagValue());
+		filter = new Filter(configuration.getTagKey(), tagValues);
 		request = new DescribeInstancesRequest();
 		sgRequest = new DescribeSecurityGroupsRequest();
 	}
