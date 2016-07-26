@@ -66,7 +66,6 @@ public class InstanceServiceImpl implements InstanceService {
 		if (sgToInstance.containsKey(sg))
 			return sgToInstance.get(sg);
 		else
-			throw new SecurityGroupNotFoundException(
-					String.format("No security group found with id %s", sg));
+			return new ArrayList<String>();
 	}
 }
