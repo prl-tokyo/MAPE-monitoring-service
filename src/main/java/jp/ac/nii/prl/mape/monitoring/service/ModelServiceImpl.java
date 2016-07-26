@@ -3,6 +3,8 @@ package jp.ac.nii.prl.mape.monitoring.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ public class ModelServiceImpl implements ModelService {
 	
 	private final InstanceService instanceService;
 	private final SecurityGroupService securityGroupService;
+	
+	private static final Logger logger = LoggerFactory.getLogger(ModelServiceImpl.class);
 	
 	@Autowired
 	public ModelServiceImpl(ModelRepository modelRepository, 
@@ -50,12 +54,16 @@ public class ModelServiceImpl implements ModelService {
 	public Model createModel(List<com.amazonaws.services.ec2.model.Instance> instances,
 			List<com.amazonaws.services.ec2.model.SecurityGroup> securityGroups,
 			InstanceTypeProperties instanceTypeProperties) throws SecurityGroupNotFoundException {
+		
+		logger.debug("Creating new model");
+		
 		Model model = new Model();
 		for (com.amazonaws.services.ec2.model.Instance instance:instances) {
 			if (instance.getState().getCode().equals(new Integer(16)))
 				model.addInstance(instanceService.fromAWS(instance));
 		}
 		for (com.amazonaws.services.ec2.model.SecurityGroup sg:securityGroups) {
+			logger.debug(String.format("Adding security group %s", sg.getGroupId()));
 			model.addSecurityGroups(securityGroupService.fromAWS(sg));
 		}
 		for (InstanceTypeProperty instanceTypeProperty:instanceTypeProperties.getInstanceTypes()) {
@@ -66,6 +74,9 @@ public class ModelServiceImpl implements ModelService {
 			instanceType.setTypeRAM(instanceTypeProperty.getTypeRAM());
 			model.addInstanceType(instanceType);
 		}
+		
+		logger.debug("Model created");
+		
 		return model;
 	}
 }

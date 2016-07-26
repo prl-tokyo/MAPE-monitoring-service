@@ -1,5 +1,7 @@
 package jp.ac.nii.prl.mape.monitoring.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ public class SecurityGroupServiceImpl implements SecurityGroupService {
 
 	private final FirewallRuleService firewallRuleService;
 	private final InstanceService instanceService;
+	
+	private static final Logger logger = LoggerFactory.getLogger(SecurityGroupServiceImpl.class);
 	
 	@Autowired
 	public SecurityGroupServiceImpl(FirewallRuleService firewallRuleService,
@@ -30,6 +34,8 @@ public class SecurityGroupServiceImpl implements SecurityGroupService {
 		SecurityGroup sg = new SecurityGroup();
 		
 		sg.setSgID(aws.getGroupId());
+		
+		logger.debug(String.format("Security Group set to %s", sg.getSgID()));
 		
 		sg.setInstRefs(instanceService.getInstancesInSG(sg.getSgID()));
 		
