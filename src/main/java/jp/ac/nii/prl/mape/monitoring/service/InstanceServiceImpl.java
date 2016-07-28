@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import jp.ac.nii.prl.mape.monitoring.SecurityGroupNotFoundException;
 import jp.ac.nii.prl.mape.monitoring.model.Instance;
+import jp.ac.nii.prl.mape.monitoring.model.Tag;
 
 @Service("instanceService")
 public class InstanceServiceImpl implements InstanceService {
@@ -20,6 +21,8 @@ public class InstanceServiceImpl implements InstanceService {
 	private final CloudWatchService cwService;
 	
 	private Map<String, List<String>> sgToInstance;
+
+//	private HashMap<Object, Object> tags;
 	
 	@Autowired
 	public InstanceServiceImpl(CloudWatchService cwService) {
@@ -42,6 +45,22 @@ public class InstanceServiceImpl implements InstanceService {
 		addToSg(instance.getInstID(), sg);
 		instance.setState(aws.getState().getCode());
 		instance.setLoad(cwService.getLoad(instance.getInstID()));
+		instance.setPlatform(aws.getPlatform());
+		
+//		this.tags = new HashMap<>();
+//		  for(jp.ac.nii.prl.mape.monitoring.model.Tag tag: instance.getTags()){
+//		//   jp.ac.nii.prl.mape.monitoring.model.Tag myTag = new jp.ac.nii.prl.mape.monitoring.model.Tag();
+//		    this.tags.put(tag.getKey(), tag.getValue());
+//		  }
+		  
+		List<Tag> tags = new ArrayList<Tag>();
+		for(com.amazonaws.services.ec2.model.Tag tag: aws.getTags()){
+		   jp.ac.nii.prl.mape.monitoring.model.Tag myTag = new jp.ac.nii.prl.mape.monitoring.model.Tag();
+				myTag.setKey(tag.getKey());
+				myTag.setValue(tag.getValue());
+				tags.add(myTag);
+		}
+		instance.setTags(tags);
 		return instance;
 	}
 	
