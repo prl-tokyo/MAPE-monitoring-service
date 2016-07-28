@@ -1,5 +1,6 @@
 package jp.ac.nii.prl.mape.monitoring.model;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -35,6 +36,10 @@ public class Instance {
 	@OneToMany(mappedBy="instance")
 	private List<Tag> tags;
 	
+	private Date launchTime;
+	
+
+
 	private Double load;
 
 	@JsonIgnore
@@ -125,13 +130,17 @@ public class Instance {
 		this.state = state;
 	}
 	
-//	public void setTags(List<Tag> tag) {
-//	// TODO Auto-generated method stub
-//	    this.tags = tag;
-
 	public void setTags(List<Tag> tags) {
 	// TODO Auto-generated method stub
 		this.tags =  tags;
+	}
+	
+	public Date getLaunchTime() {
+		return launchTime;
+	}
+
+	public void setLaunchTime(Date launchTime) {
+		this.launchTime = launchTime;
 	}
 	
 	
