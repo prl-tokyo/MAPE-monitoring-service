@@ -1,9 +1,12 @@
 package jp.ac.nii.prl.mape.monitoring.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,11 +30,20 @@ public class Instance {
 	
 	private String securityGroupRef;
 	
+	private String platform;
+	
+	@OneToMany(mappedBy="instance")
+	private List<Tag> tags;
+	
 	private Double load;
 
 	@JsonIgnore
 	@ManyToOne
 	private Model model;
+	
+	public String getPlatform() {
+		return platform;
+	}
 
 	public String getAmi() {
 		return ami;
@@ -67,6 +79,14 @@ public class Instance {
 
 	public Integer getState() {
 		return state;
+	}
+	
+	public void setPlatform(String platform) {
+		this.platform = platform;
+	}
+	
+	public List<Tag> getTags() {
+		return tags;
 	}
 
 	public void setAmi(String ami) {
@@ -104,5 +124,15 @@ public class Instance {
 	public void setState(Integer state) {
 		this.state = state;
 	}
+	
+//	public void setTags(List<Tag> tag) {
+//	// TODO Auto-generated method stub
+//	    this.tags = tag;
+
+	public void setTags(List<Tag> tags) {
+	// TODO Auto-generated method stub
+		this.tags =  tags;
+	}
+	
 	
 }
