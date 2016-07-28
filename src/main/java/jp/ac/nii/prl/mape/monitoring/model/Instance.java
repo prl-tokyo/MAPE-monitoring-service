@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,9 +38,14 @@ public class Instance {
 	private List<Tag> tags;
 	
 	private Date launchTime;
+	private Boolean EbsOptimized;
 	
-
-
+	@OneToOne
+	private Monitoring monitoring;
+	
+	@JsonIgnore
+	private String rootDeviceName;
+	
 	private Double load;
 
 	@JsonIgnore
@@ -142,6 +148,32 @@ public class Instance {
 	public void setLaunchTime(Date launchTime) {
 		this.launchTime = launchTime;
 	}
-	
-	
+
+	public Monitoring getMonitoring() {
+		return monitoring;
+	}
+
+	public void setMonitoring(Monitoring monitoring) {
+		this.monitoring = monitoring;
+	}
+
+	public Boolean getEbsOptimized() {
+		return EbsOptimized;
+	}
+
+	public void setEbsOptimized(Boolean ebsOptimized) {
+		EbsOptimized = ebsOptimized;
+	}
+
+	public String getRootDeviceName() {
+		return rootDeviceName;
+	}
+
+	public void setRootDeviceName(String rootDeviceName) {
+		this.rootDeviceName = rootDeviceName;
+	}
+
+	public Instance withRootDeviceName(String rootDeviceName){
+		return this;
+	}
 }

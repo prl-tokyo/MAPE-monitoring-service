@@ -55,8 +55,18 @@ public class InstanceServiceImpl implements InstanceService {
 				tags.add(myTag);
 		}
 		instance.setTags(tags);
-		
 		instance.setLaunchTime(aws.getLaunchTime());
+		instance.setEbsOptimized(aws.getEbsOptimized());
+		
+		com.amazonaws.services.ec2.model.Monitoring monitoring = aws.getMonitoring();
+		jp.ac.nii.prl.mape.monitoring.model.Monitoring myMonitoring = new jp.ac.nii.prl.mape.monitoring.model.Monitoring();
+		myMonitoring.setHashCode(monitoring.hashCode());
+		myMonitoring.setState(monitoring.getState());
+		instance.setMonitoring(myMonitoring);
+		
+		instance.setRootDeviceName(aws.getRootDeviceName());
+		instance.withRootDeviceName(aws.getRootDeviceName());
+		
 		return instance;
 	}
 	
