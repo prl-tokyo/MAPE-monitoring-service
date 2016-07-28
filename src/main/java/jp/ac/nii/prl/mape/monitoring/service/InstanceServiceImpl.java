@@ -46,12 +46,6 @@ public class InstanceServiceImpl implements InstanceService {
 		instance.setState(aws.getState().getCode());
 		instance.setLoad(cwService.getLoad(instance.getInstID()));
 		instance.setPlatform(aws.getPlatform());
-		
-//		this.tags = new HashMap<>();
-//		  for(jp.ac.nii.prl.mape.monitoring.model.Tag tag: instance.getTags()){
-//		//   jp.ac.nii.prl.mape.monitoring.model.Tag myTag = new jp.ac.nii.prl.mape.monitoring.model.Tag();
-//		    this.tags.put(tag.getKey(), tag.getValue());
-//		  }
 		  
 		List<Tag> tags = new ArrayList<Tag>();
 		for(com.amazonaws.services.ec2.model.Tag tag: aws.getTags()){
@@ -61,6 +55,18 @@ public class InstanceServiceImpl implements InstanceService {
 				tags.add(myTag);
 		}
 		instance.setTags(tags);
+		instance.setLaunchTime(aws.getLaunchTime());
+		instance.setEbsOptimized(aws.getEbsOptimized());
+		
+		com.amazonaws.services.ec2.model.Monitoring monitoring = aws.getMonitoring();
+		jp.ac.nii.prl.mape.monitoring.model.Monitoring myMonitoring = new jp.ac.nii.prl.mape.monitoring.model.Monitoring();
+		myMonitoring.setHashCode(monitoring.hashCode());
+		myMonitoring.setState(monitoring.getState());
+		instance.setMonitoring(myMonitoring);
+		
+		instance.setRootDeviceName(aws.getRootDeviceName());
+		instance.withRootDeviceName(aws.getRootDeviceName());
+		
 		return instance;
 	}
 	
