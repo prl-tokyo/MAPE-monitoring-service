@@ -25,7 +25,8 @@ public class FirewallRuleServiceImpl implements FirewallRuleService {
 		else // SG-based rule
 			firewallRule.setIp(ipPermission.getUserIdGroupPairs().iterator().next().getGroupId());
 		firewallRule.setOutbound(false);
-		firewallRule.setPort(ipPermission.getToPort().toString());
+		if (ipPermission.getToPort() != null)
+			firewallRule.setPort(ipPermission.getToPort().toString());
 		firewallRule.setProtocol(ipPermission.getIpProtocol());
 		
 		return firewallRule;
