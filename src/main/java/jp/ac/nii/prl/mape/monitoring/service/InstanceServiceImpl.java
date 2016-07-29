@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 
 import jp.ac.nii.prl.mape.monitoring.SecurityGroupNotFoundException;
 import jp.ac.nii.prl.mape.monitoring.model.Instance;
+import jp.ac.nii.prl.mape.monitoring.model.InstanceBlockDeviceMapping;
+import jp.ac.nii.prl.mape.monitoring.model.InstanceNetworkInterface;
 import jp.ac.nii.prl.mape.monitoring.model.Tag;
 
-@Service("instanceService")
+@Service("instanceService") 
 public class InstanceServiceImpl implements InstanceService {
 
 	private final CloudWatchService cwService;
@@ -66,6 +68,49 @@ public class InstanceServiceImpl implements InstanceService {
 		
 		instance.setRootDeviceName(aws.getRootDeviceName());
 		instance.withRootDeviceName(aws.getRootDeviceName());
+		instance.setAmiLaunchIndex(aws.getAmiLaunchIndex());
+		instance.setArchitecture(aws.getArchitecture());
+		
+		List<InstanceBlockDeviceMapping> blDeMs = new ArrayList<>();
+		for(com.amazonaws.services.ec2.model.InstanceBlockDeviceMapping blDeM: aws.getBlockDeviceMappings()){
+			jp.ac.nii.prl.mape.monitoring.model.InstanceBlockDeviceMapping myBlDeM = new jp.ac.nii.prl.mape.monitoring.model.InstanceBlockDeviceMapping();
+			myBlDeM.setDeviceName(blDeM.getDeviceName());
+			myBlDeM.setHashCode(blDeM.hashCode());
+			blDeMs.add(myBlDeM);
+		}
+		instance.setBlockDeviceMapping(blDeMs);
+		instance.setClientToken(aws.getClientToken());
+		
+	   //instance.setEnaSupport(aws.gete);
+		instance.setHypervisor(aws.getHypervisor());
+		
+//		com.amazonaws.services.ec2.model.IamInstanceProfile iamInstPro = aws.getIamInstanceProfile();
+//		jp.ac.nii.prl.mape.monitoring.model.IamInstanceProfile myIamInstPro = new jp.ac.nii.prl.mape.monitoring.model.IamInstanceProfile();
+//		myIamInstPro.setArn(iamInstPro.getArn());
+	//	instance.setIamInstanceProfile(myIamInstPro);
+		
+		instance.setImageId(aws.getImageId());
+		instance.setKernelId(aws.getKernelId());
+		instance.setKeyName(aws.getKeyName());
+		
+		List<InstanceNetworkInterface> instNetInters = new ArrayList<InstanceNetworkInterface>();
+		for(com.amazonaws.services.ec2.model.InstanceNetworkInterface instNetInter: aws.getNetworkInterfaces()){
+		   jp.ac.nii.prl.mape.monitoring.model.InstanceNetworkInterface myInstNetInter = new jp.ac.nii.prl.mape.monitoring.model.InstanceNetworkInterface();
+		   myInstNetInter.setDescription(instNetInter.getDescription());
+		   myInstNetInter.setMacAddress(instNetInter.getMacAddress());
+		   myInstNetInter.setNetworkInterfaceId(instNetInter.getNetworkInterfaceId());
+		   myInstNetInter.setSourceDestCheck(instNetInter.getSourceDestCheck());
+		   instNetInters.add(myInstNetInter);
+		}
+		instance.setNetworkInterface(instNetInters);
+		
+		//instance.setPlacement(aws.getPlacement());
+		com.amazonaws.services.ec2.model.Placement placement = aws.getPlacement();
+		jp.ac.nii.prl.mape.monitoring.model.Placement myPlacement = new jp.ac.nii.prl.mape.monitoring.model.Placement();
+		myPlacement.setHostId(placement.getHostId());
+		myPlacement.setGroupName(placement.getGroupName());
+		myPlacement.setHashCode(placement.hashCode());
+		instance.setPlacement(myPlacement);
 		
 		return instance;
 	}

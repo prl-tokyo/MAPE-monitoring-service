@@ -38,7 +38,7 @@ public class Instance {
 	private List<Tag> tags;
 	
 	private Date launchTime;
-	private Boolean EbsOptimized;
+	private Boolean ebsOptimized;
 	
 	@OneToOne
 	private Monitoring monitoring;
@@ -46,8 +46,38 @@ public class Instance {
 	@JsonIgnore
 	private String rootDeviceName;
 	
+	private Integer amiLaunchIndex;
+	
 	private Double load;
+	
+	
+	private String architecture;
+	
+	@OneToMany(mappedBy="instance")
+	private List<InstanceBlockDeviceMapping> blockDeviceMapping;
 
+	private String clientToken;
+	
+	private Boolean enaSupport;
+	
+	private String hypervisor;
+	
+	@OneToOne
+	private IamInstanceProfile iamInstanceProfile;
+	
+	private String imageId;
+	
+	private String kernelId;
+	
+	private String keyName;
+
+	@OneToMany(mappedBy="instance")
+	private List<InstanceNetworkInterface> networkInterface;
+	
+	@OneToOne
+	private Placement placement;
+
+	
 	@JsonIgnore
 	@ManyToOne
 	private Model model;
@@ -158,11 +188,11 @@ public class Instance {
 	}
 
 	public Boolean getEbsOptimized() {
-		return EbsOptimized;
+		return ebsOptimized;
 	}
 
 	public void setEbsOptimized(Boolean ebsOptimized) {
-		EbsOptimized = ebsOptimized;
+		this.ebsOptimized = ebsOptimized;
 	}
 
 	public String getRootDeviceName() {
@@ -176,4 +206,101 @@ public class Instance {
 	public Instance withRootDeviceName(String rootDeviceName){
 		return this;
 	}
+
+	public Integer getAmiLaunchIndex() {
+		return amiLaunchIndex;
+	}
+
+	public void setAmiLaunchIndex(Integer amiLaunchIndex) {
+		this.amiLaunchIndex = amiLaunchIndex;
+	}
+
+	public String getArchitecture() {
+		return architecture;
+	}
+
+	public void setArchitecture(String architecture) {
+		this.architecture = architecture;
+	}
+	
+	public List<InstanceBlockDeviceMapping> getBlockDeviceMappings() {
+		return blockDeviceMapping;
+	}
+
+	public void setBlockDeviceMapping(List<InstanceBlockDeviceMapping> blockDeviceMapping) {
+		this.blockDeviceMapping = blockDeviceMapping;
+	}
+
+	public String getClientToken() {
+		return clientToken;
+	}
+
+	public void setClientToken(String clientToken) {
+		this.clientToken = clientToken;
+	}
+
+	public Boolean getEnaSupport() {
+		return enaSupport;
+	}
+
+	public void setEnaSupport(Boolean enaSupport) {
+		this.enaSupport = enaSupport;
+	}
+
+	public String getHypervisor() {
+		return hypervisor;
+	}
+
+	public void setHypervisor(String hypervisor) {
+		this.hypervisor = hypervisor;
+	}
+
+	public IamInstanceProfile getIamInstanceProfile() {
+		return iamInstanceProfile;
+	}
+
+	public void setIamInstanceProfile(IamInstanceProfile iamInstanceProfile) {
+		this.iamInstanceProfile = iamInstanceProfile;
+	}
+
+	public String getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
+	}
+
+	public String getKernelId() {
+		return kernelId;
+	}
+
+	public void setKernelId(String kernelId) {
+		this.kernelId = kernelId;
+	}
+
+	public String getKeyName() {
+		return keyName;
+	}
+
+	public void setKeyName(String keyName) {
+		this.keyName = keyName;
+	}
+
+	public List<InstanceNetworkInterface> getNetworkInterface() {
+		return networkInterface;
+	}
+
+	public void setNetworkInterface(List<InstanceNetworkInterface> networkInterface) {
+		this.networkInterface = networkInterface;
+	}
+
+	public Placement getPlacement() {
+		return placement;
+	}
+
+	public void setPlacement(Placement placement) {
+		this.placement = placement;
+	}
+
 }
