@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,6 +66,8 @@ public class InstanceServiceImpl implements InstanceService {
 		myMonitoring.setHashCode(monitoring.hashCode());
 		myMonitoring.setState(monitoring.getState());
 		instance.setMonitoring(myMonitoring);
+		
+		instance.setInstResponseTime((new Random()).nextInt(550 - 100 + 1) + 100);
 		
 		instance.setRootDeviceName(aws.getRootDeviceName());
 		instance.withRootDeviceName(aws.getRootDeviceName());
